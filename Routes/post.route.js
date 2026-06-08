@@ -1,0 +1,20 @@
+const express = require("express")
+const router = express.Router()
+const {numberopposts} = require('../Middlewares/numberofpost.middleware.js')
+const postController = require("../Controllers/post.controller.js")
+const {checkpostowner} = require("../Middlewares/checkpostowner.middleware.js")
+const {verify} = require('../Middlewares/verify.middleware.js')
+const Validate= require('../Middlewares/validate.middleware.js')
+const postValidate = require('../Validatetors/validate.post.js')
+
+router.use(verify)
+router.get('/',numberopposts,postController.getAllPosts)
+router.post('/',Validate(postValidate),postController.createPost)
+router.post('/:id',postController.addComment)
+router.put('/:id',postController.replacePost)
+router.patch('/:id',postController.updatePost)
+router.delete('/:id',checkpostowner,postController.deletePost)
+router.get('/filter',postController.QuerySelect)
+router.get('/:id',postController.getPostById)
+
+module.exports = router
